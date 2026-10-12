@@ -2,10 +2,10 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const ts = require('/opt/nvm/versions/node/v22.16.0/lib/node_modules/typescript');
+const esbuild = require('esbuild');
 const service = fs.readFileSync('src/services/messageService.ts', 'utf8');
 const util = fs.readFileSync('src/utils/firestoreQueryFallback.ts', 'utf8');
-const compiled = ts.transpileModule(util,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText;
+const compiled = esbuild.transformSync(util,{loader:'ts',format:'cjs',platform:'node',target:'es2020'}).code;
 const sandboxModule = {exports:{}};
 vm.runInNewContext(compiled,{module:sandboxModule,exports:sandboxModule.exports});
 const {isMissingIndexError} = sandboxModule.exports;
