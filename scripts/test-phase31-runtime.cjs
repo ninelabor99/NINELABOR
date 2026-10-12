@@ -4,7 +4,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const vm=require('node:vm');
 const assert=require('node:assert/strict');
-let ts;try{ts=require('typescript')}catch{ts=require('/opt/nvm/versions/node/v22.16.0/lib/node_modules/typescript')}
+const esbuild=require('esbuild');
 const root=path.resolve(__dirname,'..');
 const cache=new Map();
 function load(relative){
@@ -12,7 +12,7 @@ function load(relative){
   if(cache.has(file))return cache.get(file).exports;
   const mod={exports:{}};cache.set(file,mod);
   const src=fs.readFileSync(file,'utf8');
-  const js=ts.transpileModule(src,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+  const js=esbuild.transformSync(src,{loader:'ts',format:'cjs',platform:'node',target:'es2022'}).code;
   const req=(id)=>{if(id.startsWith('.'))return load(path.relative(root,path.resolve(path.dirname(file),id)));throw Error('External runtime import: '+id)};
   vm.runInNewContext('(function(require,module,exports){'+js+'\n})',{Intl,Date,Error,Map,Set,Number,String,Boolean,Array,Math,console},{filename:file})(req,mod,mod.exports);
   return mod.exports;
