@@ -3,11 +3,11 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
-const ts = require('typescript');
+const esbuild = require('esbuild');
 const root = path.resolve(__dirname, '..');
 function load(file, mocks={}) {
   const source = fs.readFileSync(path.join(root,file),'utf8');
-  const code = ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+  const code = esbuild.transformSync(source,{loader:'ts',format:'cjs',platform:'node',target:'es2022'}).code;
   const mod = {exports:{}};
   vm.runInNewContext(code,{module:mod,exports:mod.exports,require(id){if(id in mocks)return mocks[id];throw Error('Unexpected import '+id);}}, {filename:file});
   return mod.exports;
