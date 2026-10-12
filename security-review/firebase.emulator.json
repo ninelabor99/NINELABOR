@@ -1,6 +1,7 @@
+
 {
   "firestore": {
-    "rules": "security-review/firestore.rules.candidate"
+    "rules": "firestore.rules.candidate"
   },
   "emulators": {
     "firestore": {
