@@ -14,7 +14,7 @@ const cases = [
   ['CI checks TypeScript', workflow.includes('npm run lint')],
   ['CI checks Vite build', workflow.includes('npm run build')],
   ['CI checks build output', workflow.includes('npm run verify:build')],
-  ['CI checks server safety regression', workflow.includes('npm run check:phase32')],
+  ['CI checks server safety regression', workflow.includes('node scripts/run-offline-suite.cjs') && fs.readFileSync(path.join(root, 'scripts/run-offline-suite.cjs'), 'utf8').includes('npm run check:phase32')],
 ];
 for (const [name, ok] of cases) { console.log(`${ok ? 'PASS' : 'FAIL'} ${name}`); assert.ok(ok, name); }
 console.log(`${cases.length}/${cases.length} server-safety regression assertions passed`);
