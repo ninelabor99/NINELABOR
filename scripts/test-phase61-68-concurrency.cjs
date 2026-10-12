@@ -1,8 +1,8 @@
 const assert=require('node:assert/strict');
 const fs=require('node:fs');const path=require('node:path');const Module=require('node:module');const cp=require('node:child_process');
-const ts=require(require.resolve('typescript',{paths:[cp.execFileSync('npm',['root','-g'],{encoding:'utf8'}).trim()]}));
+const esbuild=require('esbuild');
 const file=path.join(__dirname,'../src/services/overtimeService.ts');
-const js=ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+const js=esbuild.transformSync(fs.readFileSync(file,'utf8'),{loader:'ts',format:'cjs',platform:'node',target:'es2022'}).code;
 let store=new Map(),fail=false, commits=0, errors=0, reads=0;
 const doc=(...args)=>({id:args.length===1?'random':args.at(-1),collection:args[1]});
 const mock={collection:(_db,name)=>({name}),doc,
