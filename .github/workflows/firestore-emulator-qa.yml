@@ -1,0 +1,28 @@
+name: Firestore candidate emulator QA
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'firestore.rules'
+      - 'security-review/**'
+      - 'scripts/test-maternity-security-rules.cjs'
+      - '.github/workflows/firestore-emulator-qa.yml'
+permissions:
+  contents: read
+jobs:
+  firestore-emulator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Candidate structural checks
+        run: node security-review/check-candidate.cjs
+      - name: Run real Firestore emulator authorization tests
+        run: npx --yes firebase-tools@14 emulators:exec --only firestore --project demo-no-project --config security-review/firebase.emulator.json 'node scripts/test-maternity-security-rules.cjs'
