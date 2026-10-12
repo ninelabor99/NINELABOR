@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
-const ts = require('typescript');
+const esbuild = require('esbuild');
 const root = path.resolve(__dirname, '..');
 const source = fs.readFileSync(path.join(root,'src/server/adminUserService.ts'),'utf8');
 const server = fs.readFileSync(path.join(root,'server.ts'),'utf8');
@@ -15,7 +15,7 @@ check(source.includes("error: 'MEMBERSHIP_COMPANY_CONFLICT'"), 'conflicting memb
 check(source.includes("error: 'INVALID_MEMBERSHIP_TYPE'"), 'unknown membership must be rejected');
 check(server.includes("error: 'AUTH_BACKEND_UNAVAILABLE'"), 'AI backend outage distinct from bad token');
 check(server.indexOf('callerUid = (await getAdminAuth().verifyIdToken') < server.indexOf("error: 'AUTH_BACKEND_UNAVAILABLE'"), 'verify token before database lookup');
-const transpiled = ts.transpileModule(source, {compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText;
+const transpiled = esbuild.transformSync(source,{loader:'ts',format:'cjs',platform:'node',target:'es2022'}).code;
 const writes=[];
 const firebaseAuth={verifyIdToken:async()=>({uid:'admin1'}),createUser:async v=>{writes.push(['auth',v]);return {uid:'newuser'}},deleteUser:async()=>{}};
 const batch={create:(ref,data)=>writes.push([ref.collection,ref.id,data]),commit:async()=>{}};
