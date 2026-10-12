@@ -3,10 +3,11 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
-let ts;
-try { ts = require('typescript'); } catch { ts = require('/opt/nvm/versions/node/v22.16.0/lib/node_modules/typescript'); }
+const esbuild = require('esbuild');
 const filename = path.resolve(__dirname, '../src/server/httpProtection.ts');
-const js = ts.transpileModule(fs.readFileSync(filename, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+const js = esbuild.transformSync(fs.readFileSync(filename, 'utf8'), {
+  loader: 'ts', format: 'cjs', platform: 'node', target: 'es2022',
+}).code;
 const sandboxModule = { exports: {} };
 vm.runInNewContext(js, { module: sandboxModule, exports: sandboxModule.exports, console, Date, Map, Math, String, Number, Error }, { filename });
 const { apiSecurityHeaders, createFixedWindowLimiter, apiNotFound, apiErrorHandler } = sandboxModule.exports;
