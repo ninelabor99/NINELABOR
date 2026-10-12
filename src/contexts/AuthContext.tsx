@@ -22,7 +22,6 @@ import {
   googleProvider,
   handleFirestoreError,
   OperationType,
-  testConnection,
 } from '../lib/firebase';
 import { UserProfile, UserRole, MembershipType, SignUpType } from '../types';
 import { firmService } from '../services/firmService';
@@ -103,9 +102,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const isSigningUpRef = React.useRef(false);
 
   useEffect(() => {
-    // Run boot connection test
-    testConnection();
-
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
 
@@ -284,9 +280,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       newlyCreatedUser = cred.user;
       const user = cred.user;
       const now = new Date().toISOString();
-
-      let assignedCompanyId: string | null = payload.companyId || null;
-      let assignedCompanyName: string | undefined = payload.companyName?.trim();
 
       // Step 2: Public signup records a REQUEST only. A new company and its
       // membership must be approved by an administrator; never self-assign a tenant.

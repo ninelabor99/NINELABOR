@@ -17,7 +17,7 @@ const checks = [
  ['Deployment gate exposed', Boolean(pkg.scripts['check:release'])],
  ['Inventory exposed', Boolean(pkg.scripts['report:inventory'])],
  ['Release config avoids secret value printing', !fs.readFileSync(path.join(root,'scripts/check-release-config.cjs'),'utf8').includes('console.log(process.env')],
- ['CI invokes regression suite', fs.readFileSync(path.join(root,'.github/workflows/verify.yml'),'utf8').includes('npm run check:phase39-44')],
+ ['CI invokes regression suite', fs.readFileSync(path.join(root,'.github/workflows/verify.yml'),'utf8').includes('node scripts/run-offline-suite.cjs') && fs.readFileSync(path.join(root,'scripts/run-offline-suite.cjs'),'utf8').includes('npm run check:phase39-44')],
  ['CI does not suppress native dependency install scripts', !fs.readFileSync(path.join(root,'.github/workflows/verify.yml'),'utf8').includes('--ignore-scripts')],
 ];
 for (const [name, ok] of checks) { assert.ok(ok, name); console.log('PASS',name); }

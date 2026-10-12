@@ -275,7 +275,7 @@ export const messageService = {
         q = query(colRef, where('userId', '==', params.userId));
       }
       const snap = await getDocs(q);
-      return snap.docs.map((d) => ({ id: d.id, ...d.data() } as MessageRead));
+      return snap.docs.map((d) => ({ id: d.id, ...(d.data() as Record<string, unknown>) } as MessageRead));
     } catch (error) {
       console.warn('Failed to load message reads:', error);
       return [];

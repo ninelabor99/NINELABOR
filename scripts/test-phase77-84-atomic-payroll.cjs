@@ -1,8 +1,8 @@
 const assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path'),Module=require('node:module'),cp=require('node:child_process');
-const ts=require(require.resolve('typescript',{paths:[cp.execFileSync('npm',['root','-g'],{encoding:'utf8'}).trim()]}));
+const esbuild=require('esbuild');
 const file=path.join(__dirname,'../src/services/payrollService.ts');
-const js=ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+const js=esbuild.transformSync(fs.readFileSync(file,'utf8'),{loader:'ts',format:'cjs',platform:'node',target:'es2022'}).code;
 let docs=new Map(), failCommit=false, onBeforeCommit=null, assertions=0;
 let generatedId=0;const doc=(_db,col,id)=>({col,id:id??`audit_${++generatedId}`,key:`${col}/${id??`audit_${generatedId}`}`});
 const snap=ref=>({exists:()=>docs.has(ref.key),data:()=>docs.get(ref.key)});

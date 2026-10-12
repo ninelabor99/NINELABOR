@@ -3,10 +3,9 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
-let ts;
-try { ts = require('typescript'); } catch { ts = require('/opt/nvm/versions/node/v22.16.0/lib/node_modules/typescript'); }
+const esbuild=require('esbuild');
 const source = fs.readFileSync(path.resolve(__dirname, '../src/server/httpProtection.ts'), 'utf8');
-const js = ts.transpileModule(source, {compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+const js = esbuild.transformSync(source,{loader:'ts',format:'cjs',platform:'node',target:'es2022'}).code;
 const moduleObj = {exports:{}};
 let clock=100000;
 class TestDate extends Date { static now() { return clock; } }
