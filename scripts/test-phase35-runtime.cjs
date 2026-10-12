@@ -2,12 +2,12 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const ts = require('typescript');
+const esbuild = require('esbuild');
 const crypto = require('node:crypto');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const file = fs.readFileSync(path.join(root, 'src/server/rrnService.ts'), 'utf8');
-const js = ts.transpileModule(file, {compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText;
+const js = esbuild.transformSync(file,{loader:'ts',format:'cjs',platform:'node',target:'es2022'}).code;
 const moduleObj={exports:{}};
 const sandbox={module:moduleObj,exports:moduleObj.exports,Buffer,process:{env:{RRN_ENCRYPTION_KEY:'phase35-test-only-not-production-key'}},require(id){if(id==='crypto')return crypto;if(id==='./firebaseAdmin')return {};throw Error('Unexpected module '+id)}};
 vm.runInNewContext(js,sandbox,{filename:'rrnService.js'});
