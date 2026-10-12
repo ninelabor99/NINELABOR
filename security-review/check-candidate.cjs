@@ -21,8 +21,8 @@ const checks=[
  ['Maternity worker creation company binding',()=>assert.match(block('maternity_cases'),/request\.resource\.data\.get\('companyId', ''\) == getUserData\(\)\.get\('companyId', ''\)/)],
  ['Maternity worker creation employee binding',()=>assert.match(block('maternity_cases'),/request\.resource\.data\.get\('employeeId', ''\) == getUserData\(\)\.get\('employeeId', ''\)/)],
  ['Maternity update immutable creator',()=>assert.match(block('maternity_cases'),/request\.resource\.data\.get\('createdById', null\) == resource\.data\.get\('createdById', null\)/)],
- ['Deduction create uses new data',()=>assert.match(block('maternity_deductions'),/allow create: if canAccessTaggedBranch\(request\.resource\.data\)/)],
- ['Deduction update company immutable',()=>assert.match(block('maternity_deductions'),/request\.resource\.data\.get\('companyId', ''\) == resource\.data\.get\('companyId', ''\)/)]
+ ['Deduction client writes denied',()=>assert.match(block('maternity_deductions'),/allow create, update, delete:\s*if false\s*;/)],
+ ['Deduction client update and delete denied',()=>{const b=block('maternity_deductions'); assert.match(b,/allow create, update, delete:\s*if false\s*;/); assert.doesNotMatch(b,/allow\s+(?:write|create|update|delete)\s*:\s*if\s+(?!false\s*;)/)}]
 ];
 let failed=0;
 for(const [name,run] of checks){try{run();console.log('PASS '+name)}catch(e){failed++;console.error('FAIL '+name+': '+e.message)}}
