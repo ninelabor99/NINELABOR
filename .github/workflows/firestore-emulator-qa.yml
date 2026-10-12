@@ -36,8 +36,19 @@ jobs:
       - name: Candidate structural checks
         run: node security-review/check-candidate.cjs
 
-      - name: Install Firebase test dependencies
-        run: npm install --no-save --package-lock=false firebase @firebase/rules-unit-testing
+      - name: Install isolated Firebase test dependencies
+        run: |
+          mkdir -p .firebase-test
+          cd .firebase-test
+          npm init -y
+          npm install --no-package-lock firebase @firebase/rules-unit-testing
 
       - name: Run real Firestore emulator authorization tests
-        run: npx --yes firebase-tools@14 emulators:exec --only firestore --project demo-no-project --config security-review/firebase.emulator.json 'node scripts/test-maternity-security-rules.cjs'
+        env:
+          NODE_PATH: ${{ github.workspace }}/.firebase-test/node_modules
+        run: |
+          npx --yes firebase-tools@14 emulators:exec \
+            --only firestore \
+            --project demo-no-project \
+            --config security-review/firebase.emulator.json \
+            'node scripts/test-maternity-security-rules.cjs'
