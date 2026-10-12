@@ -21,6 +21,8 @@ const checks=[
  ['Maternity worker creation company binding',()=>assert.match(block('maternity_cases'),/request\.resource\.data\.get\('companyId', ''\) == getUserData\(\)\.get\('companyId', ''\)/)],
  ['Maternity worker creation employee binding',()=>assert.match(block('maternity_cases'),/request\.resource\.data\.get\('employeeId', ''\) == getUserData\(\)\.get\('employeeId', ''\)/)],
  ['Maternity update immutable creator',()=>assert.match(block('maternity_cases'),/request\.resource\.data\.get\('createdById', null\) == resource\.data\.get\('createdById', null\)/)],
+ ['Maternity case creation blocks deductionInfo',()=>assert.match(block('maternity_cases'),/!\\('deductionInfo' in request\\.resource\\.data\\)/)],
+ ['Maternity case updates protect deductionInfo',()=>assert.match(block('maternity_cases'),/affectedKeys\\(\\)\\.hasAny\\(\\['deductionInfo'\\]\\)/)],
  ['Deduction client writes denied',()=>assert.match(block('maternity_deductions'),/allow create, update, delete:\s*if false\s*;/)],
  ['Deduction client update and delete denied',()=>{const b=block('maternity_deductions'); assert.match(b,/allow create, update, delete:\s*if false\s*;/); assert.doesNotMatch(b,/allow\s+(?:write|create|update|delete)\s*:\s*if\s+(?!false\s*;)/)}]
 ];
