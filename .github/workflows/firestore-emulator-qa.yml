@@ -38,14 +38,14 @@ jobs:
 
       - name: Install isolated Firebase test dependencies
         run: |
-          mkdir -p .firebase-test
-          cd .firebase-test
+          mkdir -p firebase-test-deps
+          cd firebase-test-deps
           npm init -y
           npm install --no-package-lock firebase @firebase/rules-unit-testing
 
       - name: Run real Firestore emulator authorization tests
         env:
-          NODE_PATH: ${{ github.workspace }}/.firebase-test/node_modules
+          NODE_PATH: ${{ github.workspace }}/firebase-test-deps/node_modules
         run: |
           npx --yes firebase-tools@14 emulators:exec \
             --only firestore \
