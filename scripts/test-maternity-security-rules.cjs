@@ -62,6 +62,13 @@ async function main() {
     await test('Company cannot delete case', deleteDoc(ref(a,'maternity_cases','case_no_deduction')), 'deny');
     await test('Worker cannot delete case', deleteDoc(ref(worker,'maternity_cases','case_no_deduction')), 'deny');
     await test('Admin can delete case', deleteDoc(ref(admin,'maternity_cases','case_no_deduction')), 'allow');
+    // Regression coverage: all client writes to server-owned deduction state must fail.
+    await test('Company cannot create case with deductionInfo', setDoc(ref(a,'maternity_cases','qa_company_inject'), {...base('comp_a_mgr'), deductionInfo:{source:'PAID_PREPAID'}}), 'deny');
+    await test('Admin cannot create case with deductionInfo', setDoc(ref(admin,'maternity_cases','qa_admin_inject'), {...base('admin_u1'), deductionInfo:{source:'MONTHLY_FREE'}}), 'deny');
+    await test('Company cannot remove deductionInfo', updateDoc(ref(a,'maternity_cases','case_with_deduction'), {deductionInfo:null}), 'deny');
+    await test('Admin cannot remove deductionInfo', updateDoc(ref(admin,'maternity_cases','case_with_deduction'), {deductionInfo:null}), 'deny');
+    await test('Admin cannot update ledger via client', updateDoc(ref(admin,'maternity_deductions','deduct_101'), {action:'TAMPERED'}), 'deny');
+    await test('Admin cannot delete ledger via client', deleteDoc(ref(admin,'maternity_deductions','deduct_101')), 'deny');
     console.log(`TOTAL ${pass+fail} PASS ${pass} FAIL ${fail}`);
     if (fail) process.exitCode = 1;
   } finally { await env.cleanup(); }
