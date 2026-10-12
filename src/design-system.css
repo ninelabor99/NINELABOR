@@ -1,0 +1,141 @@
+/* NINELABOR UI renewal — shared visual foundations. No business logic. */
+:root {
+  --nine-navy: #071b36;
+  --nine-navy-hover: #123456;
+  --nine-blue: #1769dc;
+  --nine-ink: #14243b;
+  --nine-muted: #66758a;
+  --nine-line: #e5eaf1;
+  --nine-surface: #ffffff;
+  --nine-canvas: #f6f8fc;
+  --nine-soft-blue: #eaf3ff;
+  --nine-radius-sm: 10px;
+  --nine-radius-md: 14px;
+  --nine-radius-lg: 20px;
+  --nine-shadow-card: 0 6px 24px rgba(7, 27, 54, .055);
+  --nine-focus: 0 0 0 3px rgba(23, 105, 220, .24);
+}
+.nine-ui { color: var(--nine-ink); }
+.nine-ui .nine-card { background: var(--nine-surface); border: 1px solid var(--nine-line); border-radius: var(--nine-radius-md); box-shadow: var(--nine-shadow-card); }
+.nine-ui .nine-button-primary { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 44px; border-radius: var(--nine-radius-sm); background: var(--nine-navy); color: #fff; font-weight: 650; padding: .7rem 1.1rem; transition: background-color .15s ease; }
+.nine-ui .nine-button-primary:hover { background: var(--nine-navy-hover); }
+.nine-ui .nine-button-secondary { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 44px; border: 1px solid #cbd5e1; border-radius: var(--nine-radius-sm); background: #fff; color: var(--nine-ink); font-weight: 650; padding: .7rem 1.1rem; }
+.nine-ui .nine-input { min-height: 44px; width: 100%; border: 1px solid #d7dfeb; border-radius: var(--nine-radius-sm); background: #fff; padding: .65rem .85rem; color: var(--nine-ink); }
+.nine-ui :is(.nine-button-primary,.nine-button-secondary,.nine-input):focus-visible { outline: none; box-shadow: var(--nine-focus); }
+.nine-ui .nine-section-title { font-size: clamp(1.35rem, 2.5vw, 2rem); font-weight: 750; letter-spacing: -.035em; line-height: 1.35; }
+.nine-ui .nine-page-container { width: min(100% - 2rem, 1280px); margin-inline: auto; }
+@media (max-width: 640px) { .nine-ui .nine-page-container { width: min(100% - 1.5rem, 1280px); } .nine-ui .nine-mobile-touch { min-width: 44px; min-height: 44px; } }
+@media (prefers-reduced-motion: reduce) { .nine-ui *, .nine-ui *::before, .nine-ui *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+
+/* UI phase 3: public website responsive sections */
+.nine-ui {scroll-behavior:smooth}
+.nine-public-section {scroll-margin-top:7rem}
+.nine-eyebrow {font-size:.75rem;font-weight:800;letter-spacing:.14em;color:#2563eb}
+.nine-section-title {font-size:clamp(1.65rem,3vw,2.6rem);font-weight:800;letter-spacing:-.035em;line-height:1.35;color:#0b2345}
+.nine-info-card {border:1px solid #e1e8f3;border-radius:1rem;background:white;box-shadow:0 5px 20px rgba(15,35,70,.035)}
+.nine-primary-button {border-radius:.75rem;background:#0c2a53;color:#fff;padding:.8rem 1.3rem;font-weight:700;transition:background .2s}
+.nine-primary-button:hover {background:#164c91}
+.nine-primary-button:focus-visible,.nine-info-card button:focus-visible {outline:3px solid #60a5fa;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.nine-ui {scroll-behavior:auto}}
+
+/* UI phase 4B: responsive login and registration surfaces. Presentation only. */
+.nine-auth-overlay { padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)); }
+.nine-auth-dialog { border-radius: 20px; box-shadow: 0 24px 75px rgba(4,20,45,.25); }
+.nine-auth-dialog input:not([type="checkbox"]):not([type="radio"]), .nine-auth-dialog select { min-height: 44px; font-size: 14px; }
+.nine-auth-dialog button { touch-action: manipulation; }
+.nine-auth-dialog button:focus-visible, .nine-auth-dialog input:focus-visible { outline: 3px solid rgba(23,105,220,.45); outline-offset: 2px; }
+.nine-auth-close { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
+.nine-auth-steps { overflow-x: auto; scrollbar-width: thin; }
+.nine-auth-steps > div { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  .nine-auth-overlay { align-items: flex-end; padding: 0; }
+  .nine-auth-dialog { width: 100%; max-width: none; max-height: 100dvh !important; margin: 0; border-radius: 22px 22px 0 0; border-bottom: 0; }
+  .nine-auth-dialog > div:first-child { padding-top: max(16px, env(safe-area-inset-top)); }
+  .nine-auth-dialog > div:last-child { padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+  .nine-auth-steps > div { font-size: 10px; padding: 12px 3px; }
+}
+@media (prefers-reduced-motion: reduce) { .nine-auth-dialog { animation: none !important; } }
+
+/* UI renewal phase 5: role-scoped mobile navigation. Existing data and permissions are untouched. */
+@media (max-width: 767px) {
+  .nine-portal-content { padding-bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px)); }
+  .nine-portal-mobile-nav {
+    position: fixed; z-index: 35; inset-inline: 0; bottom: 0;
+    display: flex; justify-content: space-around; align-items: stretch;
+    padding: 0.4rem max(0.5rem, env(safe-area-inset-left, 0px)) calc(0.4rem + env(safe-area-inset-bottom, 0px)) max(0.5rem, env(safe-area-inset-right, 0px));
+    border-top: 1px solid #dbe4f0; background: rgba(255,255,255,0.97);
+    box-shadow: 0 -5px 22px rgba(15,35,65,.07);
+  }
+  .nine-portal-mobile-nav-item {
+    display: flex; flex: 1 1 0; min-width: 0; min-height: 50px;
+    flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    border-radius: 10px; color: #64748b; font-size: 10px; font-weight: 600;
+    transition: background-color .15s ease, color .15s ease;
+  }
+  .nine-portal-mobile-nav-item.is-active { color: #1555ac; background: #eff6ff; }
+  .nine-portal-mobile-nav-item:focus-visible { outline: 2px solid #2563eb; outline-offset: -2px; }
+}
+
+/* UI renewal phase 6-A: company dashboard and worker directory; presentation only */
+.nine-company-workspace { max-width: 1440px; margin-inline: auto; }
+.nine-company-header { background: linear-gradient(115deg,#f8fbff,#ffffff 75%); border:1px solid #e4ebf5; border-radius:20px; padding:20px 22px; }
+.nine-company-tabs { background:#fff; border:1px solid #e3eaf4; border-radius:14px; padding:4px 8px 0; scrollbar-width:thin; }
+.nine-company-dashboard .nine-company-summary > div { border-color:#e1e8f2; border-radius:18px; box-shadow:0 3px 18px rgba(16,39,76,.045); min-height:175px; }
+.nine-company-dashboard .nine-company-summary > div:hover { border-color:#bdd0ed; }
+.nine-company-workers { border-radius:18px; border-color:#e1e8f2; }
+.nine-company-worker-table th { white-space:nowrap; }
+@media (max-width: 767px) {
+ .nine-company-header { padding:16px; border-radius:16px; }
+ .nine-company-header > div:first-child > div:first-child { flex-wrap:wrap; }
+ .nine-company-tabs { padding:2px 6px 0; }
+ .nine-company-dashboard .nine-company-summary { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+ .nine-company-dashboard .nine-company-summary > div { padding:14px; min-height:170px; }
+ .nine-company-dashboard .nine-company-summary > div:nth-child(6) { grid-column:span 2; }
+ .nine-company-dashboard .nine-company-summary > div .text-2xl { font-size:1.25rem; }
+ .nine-company-worker-table { min-width:690px; }
+}
+@media (max-width: 360px) { .nine-company-dashboard .nine-company-summary { grid-template-columns:1fr; } .nine-company-dashboard .nine-company-summary > div:nth-child(6) { grid-column:auto; } }
+
+/* UI renewal 6-B: company worker roster and attendance mobile ergonomics. */
+.nine-workers-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;border-bottom:1px solid #e5eaf2}
+.nine-workers-search{display:block;min-width:220px;max-width:330px;width:100%}
+.nine-workers-search input{width:100%;min-height:44px;border:1px solid #dbe3ef;border-radius:12px;padding:10px 14px;font-size:14px;background:#f8fafc;color:#17243a}
+.nine-workers-search input:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
+.nine-worker-mobile-list{padding:12px;display:grid;gap:10px}
+.nine-worker-mobile-card{border:1px solid #e2e8f0;border-radius:14px;padding:16px;background:#fff;box-shadow:0 2px 8px rgba(15,23,42,.035)}
+.nine-worker-mobile-details{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;padding-top:12px;border-top:1px solid #edf2f7;font-size:12px}
+.nine-worker-mobile-details dt{color:#64748b;margin-bottom:5px}
+.nine-worker-mobile-details dd{color:#17243a;font-weight:600;overflow-wrap:anywhere}
+@media(min-width:768px){.nine-worker-mobile-list{display:none}}
+@media(max-width:767px){.nine-workers-toolbar{flex-direction:column;align-items:stretch;padding:16px}.nine-workers-search{max-width:none;min-width:0}.nine-company-workspace .nine-company-workers{border-radius:16px}}
+
+
+/* Phase 9: unified, role-neutral responsive workspace layer. Presentation only. */
+.nine-workspace { min-width: 0; color: var(--nine-ink); }
+.nine-workspace :where(.grid, .flex, .min-w-0) { min-width: 0; }
+.nine-workspace :where(h1, h2, h3, p, dt, dd) { overflow-wrap: break-word; }
+.nine-workspace :where(input:not([type=checkbox]):not([type=radio]), select, textarea) { max-width: 100%; }
+.nine-workspace :where(button, a, input, select, textarea):focus-visible { outline: 2px solid var(--nine-blue); outline-offset: 2px; }
+.nine-workspace :where(button, a) { touch-action: manipulation; }
+.nine-workspace :where(.overflow-x-auto) { max-width: 100%; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+.nine-workspace :where(.rounded-2xl, .rounded-xl) { min-width: 0; }
+.nine-workspace-tabs { scrollbar-width: thin; scroll-padding-inline: 1rem; }
+.nine-workspace-tabs > button { min-height: 44px; flex-shrink: 0; }
+.nine-workspace-modal { padding-top: max(12px, env(safe-area-inset-top, 0px)); padding-bottom: max(12px, env(safe-area-inset-bottom, 0px)); }
+.nine-workspace-dialog { max-height: min(90dvh, 900px); overflow-y: auto; overscroll-behavior-y: contain; }
+@media (max-width: 767px) {
+  .nine-workspace { width: 100%; max-width: 100%; }
+  .nine-workspace :where(input:not([type=checkbox]):not([type=radio]), select, textarea) { font-size: 16px; }
+  .nine-workspace :where(.overflow-x-auto) { scrollbar-width: thin; }
+  .nine-workspace :where(.text-3xl) { font-size: 1.6rem; line-height: 1.3; }
+  .nine-workspace :where(.text-2xl) { line-height: 1.35; }
+  .nine-workspace-modal { align-items: flex-end; padding-inline: 0; padding-bottom: 0; }
+  .nine-workspace-dialog { max-width: none; width: 100%; max-height: min(92dvh, 900px); border-radius: 20px 20px 0 0; padding-bottom: max(20px, env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-width: 360px) {
+  .nine-portal-mobile-nav-item { font-size: 9px; }
+  .nine-workspace :where(.text-2xl) { font-size: 1.3rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nine-workspace-tabs { scroll-behavior: auto; }
+}

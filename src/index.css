@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* 8단계: 관리자 공통 반응형 업무 화면. 데이터/권한 처리에는 관여하지 않습니다. */
+.nine-admin-workspace { --nine-admin-navy: #172b4d; }
+.nine-admin-main { min-width: 0; }
+.nine-admin-main :where(input, select, textarea) { max-width: 100%; }
+.nine-admin-main :where(button, a):focus-visible,
+.nine-admin-workspace aside button:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+.nine-admin-main :where(table) { min-width: max-content; }
+.nine-admin-main :where(.overflow-x-auto) { max-width: 100%; overscroll-behavior-x: contain; }
+@media (max-width: 639px) {
+  .nine-admin-workspace { gap: 0.75rem; }
+  .nine-admin-main :where(h1) { font-size: 1.375rem; line-height: 1.8rem; overflow-wrap: anywhere; }
+  .nine-admin-main :where(h2) { overflow-wrap: anywhere; }
+  .nine-admin-main :where(.grid-cols-2):not(.sm\:grid-cols-2) { min-width: 0; }
+  .nine-admin-main :where(input, select, textarea) { font-size: 16px; }
+  .nine-admin-main :where(.rounded-2xl, .rounded-xl) { max-width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nine-admin-workspace *, .nine-admin-workspace *::before, .nine-admin-workspace *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+}
